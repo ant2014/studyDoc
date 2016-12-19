@@ -8,7 +8,7 @@ px、em、rem是相对长度单位，在不同的环境下的物理长度不同
 
 ppi：pixels per inch，屏幕上每英寸可以显示的像素点的数量，即屏幕像素密度。  
 dpi：dots per inch，打印机可以在一英寸内打多少个点。当dpi的概念用在计算机屏幕上时，就称之为ppi。Android比较喜欢使用dpi，IOS比较喜欢使用ppi。
-dp、dip：dp和dip都是Density Independent Pixels的缩写，密度独立像素，可以想象成是一个物理尺寸，使同样的设置在不同手机上显示的效果看起来是一样的。
+dp、dip：dp和dip都是Density Independent Pixels的缩写，密度独立像素，可以想象成是一个物理尺寸，在不同手机上占据相同的物理长度，像素密度高的屏幕它就多占用几个像素，像素密度低的屏幕它就少占用几个像素。
 
 在Android中，规定以160dpi为基准，1dp=1px。如果密度是320dpi，则1dp=2px，以此类推。也就是说，同样是1dp，在像素密度大的设备上，多占用几个像素，使得最终的物理尺寸基本一致。  
 Android和IOS都会通过转换系数让控件适应屏幕的尺寸。一个按钮给了44x44dp的大小，在160dpi密度的时候，按钮就是44x44px大小；在320dpi密度的时候，按钮就是88x88px的大小。不需要我们去书写多套尺寸。
@@ -27,5 +27,17 @@ iPhone的默认viewport为980px。我们可以手动设置viewport
 `<meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=no" />`
 分别设置了宽度、初始缩放值、最大缩放值、是否允许用户进行缩放。
 
-##3、css中的1px并不等于设备的1px
-css中常用px作为单位，在桌面浏览器中css的1px代表显示器的1个物理像素，但css中的像素并不等同于物理像素，在不同的设备和环境中，1px所代表的物理像素是不同的。iPhone3的屏幕分辨率为320x480，1px等于一个物理像素，iPhone4的屏幕分辨率提高了一倍，变成了640x960，但是屏幕的尺寸并没有变化。
+如果不设置viewport
+iPhone4s如果不设置viewport，则它的viewport默认为980px，如果我们在页面中显示一个100x100px大小的正方形，则这个正方形的宽度是整个viewport的100/980，看起来会很小。
+如果设置了viewport为device-width，即320px，则100x100的元素，所占的宽度就是100/320，看起来比原来大很多。
+
+如果你打开chrome的浏览器的调试工具，选择iPhone6，你会发现，上面写的iPhone6的宽高为375x667，这是为什么呢？   
+因为iPhone6的像素为750x1334px，ppi为326，所以系数为2，则iPhone6的device-width即为750/2 = 375px。  
+同理，红米1s的屏幕分辨率是1280x720px，ppi是312，所以系数是2x。那device-width就等于720/2=360px。   
+同理，三星note4的屏幕分辨率是2560x1440px，ppi是515，所以系数是4x。那device-width就等于1440/4=360px，和iPhone6和小米的divice-width差不多大。   
+**分辨率差别很大的设备，横向分成的px份数差不多，所以我们并不需要写其他尺寸来适配不同的屏幕大小。但是不同设备的屏幕物理宽度可能有差别，所以虽然都分成相同的份数，可能每一份的大小还是有一些差别。**
+
+##3、CSS像素
+**css中的1px并不等于设备的1px**  
+CSS像素（px）用于页面布局的单位。样式的像素尺寸（例如 width: 100px）是以CSS像素为单位指定的。CSS像素与 dip 的比例即为网页的缩放比例，如果网页没有缩放，那么一个CSS像素就对应一个 dip（设备逻辑像素)。  
+缩放会引起css中px的变化。例如，当用户把页面放大一倍，那么css中1px所代表的物理像素也会增加一倍；反之把页面缩小一倍，css中1px所代表的物理像素也会减少一倍。
