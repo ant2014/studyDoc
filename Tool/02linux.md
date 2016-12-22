@@ -364,7 +364,15 @@ cat /etc/inittab
 退出登录logout，而不是直接关闭xshell，直接关闭，用户还卡在那里
  
 ##6、其他常用命令
+tail命令是按照要求将指定文件的最后部分输出，如果该文档有更新，则tail会自动刷新，确保你看到的是最新的内容。
+1、tail -f filename
+说明：监视filename文件的尾部内容（默认10行，相当于添加参数 -n 10），刷新显示在屏幕上。退出，按下CTRL+C。
+
+2、tail -n 20 filename
+说明：显示filename最后20行。
+相反的有head，只显示前面几行cat 从第一行开始显示文档内容
 ##7、Shell基础
 ##8、软件安装
 Linux下源码的编译安装一般分为三个步骤：配置configure、编译make、安装make install  
-configure --prefix是用来指定安装目录，如果不指定prefix，则可执行文件默认放在/usr/local/bin，库文件默认放在/usr/local/bin，配置文件默认放在/usr/local/etc，其他资源文件默认放在/usr/local/share。如果你要卸载这个程序，需要在原来的make目录下使用make uninstall，要么就去上述目录中将相关的文件逐个手工删除。指定prefix后，直接删除一个文件夹就够了。
+configure --prefix是用来指定安装目录，类似Windows中指定软件的安装目录，如果不指定prefix，则可执行文件默认放在/usr/local/bin，库文件默认放在/usr/local/bin，配置文件默认放在/usr/local/etc，其他资源文件默认放在/usr/local/share。如果你要卸载这个程序，需要在原来的make目录下使用make uninstall，要么就去上述目录中将相关的文件逐个手工删除。指定prefix后，该软件的所有文件都将被复制到这个目录，直接删除该目录就够了。所以说为了防止软件复制到多个目录下难以维护，最好指定该目录。
+使用--prefix的另一个好处是卸载软件或移植软件很方便。卸载只需删除该目录，就可以把软件卸载干净。移植软件只需要拷贝整个目录到另外一台相同系统的机器即可。
