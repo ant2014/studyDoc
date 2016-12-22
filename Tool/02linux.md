@@ -167,7 +167,40 @@ locate是按照/etc/updatedb.conf配置文件来搜索的
 ###2.2 文件搜索命令 find
 find [搜索范围] [搜索条件]
 find / -name install.log
-避免大范围搜索，会非常耗费系统资源
+避免把搜索范围设置的过大，会非常耗费系统资源
+find默认是在系统中搜索完全符合文件名的的文件。如果需要模糊匹配，需要使用通配符
+
+Linux中的主要通配符
+* 匹配任意内容
+？匹配任意一个字符
+[]匹配任意一个中括号内的字符
+
+find /root -name "install.log*"
+find /root -iname install.log  //文件名不区分大小写
+find /root -user root //按照所有者搜索
+find /root -nouser	//查找没有所有者的文件
+find /var/log -mtime +10	//查找10天前修改的文件
+-10 10天内
+10 10天当天
++10 10天前
+
+atime 文件访问时间
+ctime 改变文件属性的时间
+mtime 改变文件内容的时间
+
+find /root -size 25k	//查找文件大小是25k的文件，k小写，M大写
++25k	大于25k
+-25k	小于25k
+
+find /root -inum 26224	//查找i节点号为26224的文件
+
+find /root -size +20k -a -size -50k	//查找大于20k并小于50k的文件
+-a and 逻辑与，两个条件都满足
+-o or 逻辑或，两个条件满足一个即可
+
+find /root -size +20k -a -size -50k -exec ls -lh {} \;//查找大于20k并小于50k的文件，并显示详细信息
+-exec/-ok 命令 {} \; 对搜索结果执行操作，这是固定格式，中间的命令必须是能处理第一个结果的命令
+
 
 ###2.3 命令搜索命令 whereis和which
 whereis 命令名
@@ -207,7 +240,128 @@ find命令：在系统中搜索符合条件的文件名，如果需要匹配，�
 grep命令：在文件当中搜索符合条件的字符串，如果需要匹配，使用正则表达式进行匹配，正则表达式是包含匹配
 
 ##3、帮助命令
+man 命令 //获取指定命令的帮助，man是manual的缩写，等同于whatis命令
+man -f passwd		//可以查看命令所有等级的帮助信息
+![man -f passwd](http://7xjao4.com1.z0.glb.clouddn.com/test-1E0C0A62-398E-42D0-8592-5AD7894D2EE6.png)
+可以看到这个命令有两个等级的帮助文件
+man 5 passwd		//查看5级命令的帮助文件，如果有多个等级，而你又没有指定等级号，则默认打开最小等级的命令
+man 8 ifconfig	//ifconfig是8级的命令，管理员的命令，一般用户不能调用
+
+man -k passwd		//查找到所有帮助文档中有“passwd”关键字的
+apropos passwd  //等同于man -k
+
+命令 --help	//获取命令选项的帮助，部分已经翻译成中文了
+
+为什么叫shell，shell是包裹内核的壳，内核只能执行01的机器指令，shell要将字符指令翻译为机器指令，再传给内核，说白了就是用户和计算机内核交互的接口。
+
+确定是否是内部命令
+Linux中有些命令是Linux中自带的，有些是别人写好装到Linux中的，如何区分命令是否是自带的呢？
+![](http://7xjao4.com1.z0.glb.clouddn.com/test-0A8E8FB7-E89B-4CF3-8A1E-5385C3CBBC2B.png)
+如上图所示，如果whereis后没有命令的位置，则这个命令是内核自带的，cd就是典型的内核自带的命令。
+
+man内核命令如man cd不能直接得到cd的详细说明，可以使用help来专门获取内部命令的帮助，help cd，help不能获取外部命令的帮助。
+
+
+info命令是个巨大的帮助文档，不常用
+
 ##4、压缩命令
+常用压缩格式.zip .gz .bz2 .tar.gz .tar.bz2
+Linux不需要扩展名，但是对于压缩文件，我们还是需要写扩展名，为了方便识别出来这个是压缩文件
+
+.zip压缩格式，Linux和Windows中是通用的
+zip 压缩文件名 源文件	//压缩文件
+
+zip -r 压缩文件名 源目录	//压缩目录
+
+uzip 压缩文件	//解压缩文件
+
+.gz压缩格式
+gzip 源文件  //压缩为.gz格式的压缩文件，源文件会消失
+
+gzip -c 源文件 > 压缩文件  //压缩为.gz格式，源文件保留，>是重定向，将前面的结果写到后面去
+例如gzip -c cangls > cangls.gz
+
+gzip -r 目录  //压缩目录下的所有子文件，但是不能压缩目录
+
+gzip -d 压缩文件	//解压缩文件
+
+gunzip 压缩文件	//解压缩文件
+
+.tar.gz
+目录不能压缩，那么可以先使用tar命令将其打包为一个文件
+tar -cvf 打包文件名 源文件
+选项：
+
+* -c 打包
+* -v 显示过程
+* -f 指定打包后的文件名
+
+例如：tar -cvf longls.tar longls
+
+解打包的方法
+tar -xvf 打包文件名	//-x 解打包
+例如：tar -xvf longls.tar
+
+用起来很麻烦
+.tar.gz是先打包为.tar格式，再压缩为.gz格式
+tar -zcvf 压缩文件名.tar.gz 源文件
+tar -jcvf 压缩文件名.tar.bz2 源文件
+
+tar -zxvf 压缩文件名.tar.gz
+tar -jxvf 压缩文件名.tar.bz2
+
+tar -jxvf longls.tar.bz2 -c /tmp/		//指定解压缩的位置
+tar -jcvf longls.tar.bz2 longls1 longls2  //压缩多个文件在一起
+tar -jzvf longls.tar.bz2 //只查看其中的目录，而不真解压
+
+
+.bz2压缩格式
+bzip2 源文件	//压缩为.bz2格式，不保留源文件
+bzip2 -k 源文件	//压缩之后保留源文件
+注意bzip2命令不能压缩目录
+
+bzip2 -d 压缩文件	//解压缩，-k保留压缩文件
+bunzip2 压缩文件	//解压缩，-k保留压缩文件
+
+
 ##5、关机与重启命令
+shutdown 命令
+shutdown [选项] 时间
+选项：
+	
+* -c 取消前一个关机命令
+* -h 关机
+* -r 重启
+
+时间可以写now或05:30，但是如果直接写时间会中断终端的操作，无法再输入别的命令，ctrl+c退出，执行shutdown -r 05:30 &，添加一个后台符，放到后台执行
+
+halt
+
+poweroff
+
+init 0
+这三个命令不会像shutdown一样在关机时正确保存状态，而是直接关闭，所以不建议用
+
+reboot，init 6重启命令，reboot相对安全
+
+系统运行级别
+
+* 0 关机
+* 1 单用户
+* 2 不完全多用户，不含NFS服务
+* 3 完全多用户
+* 4 未分配
+* 5 图形界面
+* 6 重启
+
+init 0，init是调用的意思，即调用0级别
+
+runlevel	//显示上次的级别和当前级别
+
+修改系统启动后的默认运行级别
+cat /etc/inittab
+
+退出登录logout，而不是直接关闭xshell，直接关闭，用户还卡在那里
+ 
 ##6、其他常用命令
 ##7、Shell基础
