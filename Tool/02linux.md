@@ -365,3 +365,6 @@ cat /etc/inittab
  
 ##6、其他常用命令
 ##7、Shell基础
+##8、软件安装
+Linux下源码的编译安装一般分为三个步骤：配置configure、编译make、安装make install  
+configure --prefix是用来指定安装目录，如果不指定prefix，则可执行文件默认放在/usr/local/bin，库文件默认放在/usr/local/bin，配置文件默认放在/usr/local/etc，其他资源文件默认放在/usr/local/share。如果你要卸载这个程序，需要在原来的make目录下使用make uninstall，要么就去上述目录中将相关的文件逐个手工删除。指定prefix后，直接删除一个文件夹就够了。
