@@ -386,10 +386,14 @@ tail命令是按照要求将指定文件的最后部分输出，如果该文档�
 说明：显示filename最后20行。
 相反的有head，只显示前面几行cat 从第一行开始显示文档内容
 
+##7、网络命令
+IP和掩码  ifconfig eth0 192.168.1.100 netmask 255.255.255.0
+设置网关 route add default gw 192.168.1.1
+GET请求 curl url
+POST请求 curl -d "param=nick&param2=12345" http://www.coolwubo.com
+
 ##7、其他常用目录
-init.d中存放的是一些脚本，一般是linux以rpm包安装时设定的一些服务的启动脚本。执行这些脚本可以用来启动、停止、重启这些服务。
-
-
+/etc/init.d中存放的是一些脚本，一般是linux以rpm包安装时设定的一些服务的启动脚本。执行这些脚本可以用来启动、停止、重启这些服务。系统启动的时候拿到init级别后执行，根据/etc/rc.d/rc{运行级别}.d目录下的脚本链接来执行。
 ##7、Shell基础
 ##8、软件安装
 Linux下源码的编译安装一般分为三个步骤：配置configure、编译make、安装make install  
