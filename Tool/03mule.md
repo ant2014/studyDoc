@@ -127,5 +127,22 @@ Variables分为3种
 
 设置variable的方式和properties一样，但是取值时要注意，如果你是flow级别的，使用#[flowVars.city]取出来
 
+##ESB开发前的准备
+社区版和企业版Runtimes的安装
+AnypointStudio中默认集成的企业版的runtime，在企业版runtime中开发使用企业版的特性，部署到社区版的服务器上，有些功能会报错的。开发是OK，但是部署会出很多问题。还有版本上也要注意，新版本中开发，老版本runtime中运行，可能会出错。
+AnypointStudio默认是企业版runtime，要改为社区版runtime，help 》 install new software 下拉列表中找mule esb runtime。
+
+安装Apikit
+如果使用RAML语法进行RESTFul接口的开发，必然会用到Apikit插件。新版Studio工具中默认会安装。用RAML设计好RESTFul接口后，直接到Studio中创建工程，就需要用到这个插件
+
+安装需要的Connectors比如不是很常见的，支持特殊通信协议的Connector，需要自己安装，安装方式，也是help > install new software.
+
+安装Security
+
+help > Install New Software，点击Add，添加如下地址http://security-update-site.s3.amazonaws.com 选择需要的安全组件进行安装
+安装完成后，操作面板的右侧就会有对应的组件
+
+AnypointStudio Addons
+
 
 
